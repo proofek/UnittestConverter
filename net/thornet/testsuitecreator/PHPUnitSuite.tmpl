@@ -1,0 +1,36 @@
+#import os.path
+<?php
+
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', '${dirName}_AllTests::main');
+}
+ 
+require_once 'PHPUnit/Framework.php';
+require_once 'PHPUnit/TextUI/TestRunner.php';
+
+#for $testFile in $tests
+require_once '${os.path.basename($testFile)}';
+#end for 
+
+class ${dirName}_AllTests
+{
+    public static function main()
+    {
+        PHPUnit_TextUI_TestRunner::run(self::suite());
+    }
+ 
+    public static function suite()
+    {
+        \$suite = new PHPUnit_Framework_TestSuite('Framework ${dirName}');
+
+		#for $testClassName in $classNames
+		\$suite->addTestSuite('$testClassName');
+		#end for
+ 
+        return \$suite;
+    }
+}
+ 
+if (PHPUnit_MAIN_METHOD == '${dirName}_AllTests::main') {
+    ${dirName}_AllTests::main();
+}
